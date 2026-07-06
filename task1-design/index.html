@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>CubMart</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand text-white" href="#">
+          Cub<span class="logo-text">Mart</span>
+        </a>
+
+        <div class="d-flex align-items-center ms-auto me-2 order-lg-last">
+          <a class="nav-link cart-box" href="../task2-logic/cart.html">
+            <i class="fa-solid fa-cart-arrow-down"></i>
+            <span class="badge">0</span>
+          </a>
+        </div>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navMenu"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMenu">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+            <li class="nav-item">
+              <a class="nav-link" href="#home">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#shop"
+                id="shopDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Shop
+              </a>
+              <ul
+                class="dropdown-menu border-0 shadow"
+                aria-labelledby="shopDropdown"
+              >
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="#shop"
+                    onclick="filterProducts('all')"
+                    >All Products</a
+                  >
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="#shop"
+                    onclick="filterProducts('electronics')"
+                    >Electronics</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="#shop"
+                    onclick="filterProducts('accessories')"
+                    >Accessories</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="#shop"
+                    onclick="filterProducts('lifestyle')"
+                    >Lifestyle</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#questions">Why Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#spotlight">Spotlight</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#comments">Comments</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contact">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container pt-5 mt-4 pb-5">
+      <div class="container-fluid">
+        <section class="hero section" id="home">
+          <div class="hero-text">
+            <h1>Shop Smart, Live Better</h1>
+            <p>
+              Discover our exclusive collection of the latest products designed
+              to fit your daily lifestyle at the best prices.
+            </p>
+            <a
+              href="#shop"
+              class="btn btn-hero text-decoration-none d-inline-block"
+              >Shop Now</a
+            >
+          </div>
+          <div class="hero-img">
+            <img
+              src="../imgs/heroSectionPoto.png"
+              alt="photo for hero section"
+            />
+          </div>
+        </section>
+
+        <section class="questions section" id="questions">
+          <div class="questions-text">
+            <h2>Why Choose CubMart?</h2>
+          </div>
+          <div class="card">
+            <i class="fa-solid fa-truck-fast"></i>
+            <h3>Fast & Secure Shipping</h3>
+            <p>
+              Free delivery straight to your doorstep with the highest safety
+              standards.
+            </p>
+          </div>
+          <div class="card">
+            <i class="fa-solid fa-award"></i>
+            <h3>100% Guaranteed Quality</h3>
+            <p>
+              All our products are 100% authentic and undergo strict quality
+              checks.
+            </p>
+          </div>
+          <div class="card">
+            <i class="fa-solid fa-headset"></i>
+            <h3>24/7 Customer Support</h3>
+            <p>
+              Our dedicated team is ready to answer your questions and assist
+              you around the clock.
+            </p>
+          </div>
+        </section>
+
+        <section class="shop section py-5" id="shop">
+          <h2 class="text-center mb-4">Our Products</h2>
+          <div class="d-flex justify-content-center mb-4">
+            <ul class="nav nav-pills" id="filterTabs">
+              <li class="nav-item">
+                <button
+                  class="nav-link active fw-bold me-2"
+                  onclick="filterProducts('all', this)"
+                >
+                  All
+                </button>
+              </li>
+              <li class="nav-item">
+                <button
+                  class="nav-link fw-bold me-2"
+                  onclick="filterProducts('electronics', this)"
+                >
+                  Electronics
+                </button>
+              </li>
+              <li class="nav-item">
+                <button
+                  class="nav-link fw-bold me-2"
+                  onclick="filterProducts('accessories', this)"
+                >
+                  Accessories
+                </button>
+              </li>
+              <li class="nav-item">
+                <button
+                  class="nav-link fw-bold"
+                  onclick="filterProducts('lifestyle', this)"
+                >
+                  Lifestyle
+                </button>
+              </li>
+            </ul>
+          </div>
+          <div class="row g-4" id="products-container"></div>
+        </section>
+
+        <section class="spotlight-section py-5" id="spotlight">
+          <h2 class="text-center mb-4">Product Spotlight</h2>
+          <div
+            class="spotlight-block p-4 p-md-5 d-flex flex-column flex-md-row align-items-center gap-4"
+          >
+            <div class="spotlight-img-holder w-100 flex-1">
+              <img
+                src="../imgs/SmartAnti-TheftBackpack.webp"
+                alt="Spotlight Product"
+                class="img-fluid rounded-3"
+              />
+            </div>
+            <div class="spotlight-content flex-1">
+              <span class="badge bg-danger mb-2">DEAL OF THE WEEK</span>
+              <h3>Smart Anti-Theft Backpack</h3>
+              <p class="price-text">$79.99</p>
+              <p class="desc-text">
+                Featuring an integrated USB charging port, spacious
+                organizational compartments, and a sleek water-resistant design
+                to protect your essentials on the go.
+              </p>
+              <button class="btn-hero" onclick="addToCart(4)">
+                Get It Now
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="reviews-section py-5" id="comments">
+          <h2 class="text-center mb-4">What Our Customers Say</h2>
+          <div class="row g-4">
+            <div class="col-md-4">
+              <div class="review-card p-4">
+                <div class="stars mb-2">★★★★★</div>
+                <p class="review-text">
+                  "Amazing shopping experience! The product quality exceeded my
+                  expectations and the delivery was faster than I thought."
+                </p>
+                <span class="review-user">John Doe</span>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="review-card p-4">
+                <div class="stars mb-2">★★★★★</div>
+                <p class="review-text">
+                  "Excellent service and customer support. The smart watch works
+                  flawlessly. Definitely buying from CubMart again."
+                </p>
+                <span class="review-user">Sarah Smith</span>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="review-card p-4">
+                <div class="stars mb-2">★★★★☆</div>
+                <p class="review-text">
+                  "Great prices and authentic items. Shipping took an extra day
+                  but support updated me immediately. Recommended!"
+                </p>
+                <span class="review-user">David P.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="contact-section py-5" id="contact">
+          <h2 class="text-center mb-4">Get In Touch With Us</h2>
+          <div
+            class="form-container mx-auto p-4 p-md-5 border rounded-3 bg-white shadow-sm"
+            style="max-width: 600px"
+          >
+            <form
+              onsubmit="
+                event.preventDefault();
+                alert('Message sent successfully!');
+              "
+            >
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Full Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter your name"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Email Address</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Enter your email"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Your Message</label>
+                <textarea
+                  class="form-control"
+                  rows="4"
+                  placeholder="How can we help you?"
+                  required
+                ></textarea>
+              </div>
+              <button type="submit" class="btn-hero w-100">Send Message</button>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer py-5 mt-5">
+      <div class="container text-center text-md-start">
+        <div class="row g-4">
+          <div class="col-md-4">
+            <h4 class="text-white mb-3">About CubMart</h4>
+            <p>
+              Your ultimate destination for quality, smart lifestyle items and
+              high-end tech electronics at unbeatable prices.
+            </p>
+          </div>
+          <div class="col-md-4">
+            <h4 class="text-white mb-3">Quick Links</h4>
+            <ul class="p-0 list-unstyled">
+              <li class="mb-2">
+                <a href="#home" class="text-decoration-none">Home</a>
+              </li>
+              <li class="mb-2">
+                <a href="#shop" class="text-decoration-none">Shop Products</a>
+              </li>
+              <li class="mb-2">
+                <a href="#contact" class="text-decoration-none"
+                  >Contact Support</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <h4 class="text-white mb-3">Follow Us</h4>
+            <div
+              class="d-flex gap-3 justify-content-center justify-content-md-start"
+            >
+              <a href="#" class="text-white fs-4"
+                ><i class="fa-brands fa-facebook"></i
+              ></a>
+              <a href="#" class="text-white fs-4"
+                ><i class="fa-brands fa-instagram"></i
+              ></a>
+              <a href="#" class="text-white fs-4"
+                ><i class="fa-brands fa-x-twitter"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+        <hr class="border-secondary my-4" />
+        <div class="text-center text-muted small">
+          All rights reserved © 2026 CubMart
+        </div>
+      </div>
+    </footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="script.js"></script>
+  </body>
+</html>
