@@ -278,34 +278,49 @@ function showProducts(list) {
   const container = document.getElementById("products-container");
   if (!container) return;
 
-  container.innerHTML = "";
+  let html = "";
 
   if (list.length === 0) {
-    container.innerHTML = `<p class="text-center text-muted">No products found here.</p>`;
+    html += `<p class="text-center text-muted">No products found here.</p>`;
+    container.innerHTML = html;
     return;
   }
 
   list.forEach((product) => {
     let badgeHTML = "";
-    if (product.badge) {
-      let badgeColor = "";
-      if (product.badge === "SALE") {
+    let badgeColor = "";
+    switch (product.badge) {
+      case "SALE":
         badgeColor = "bg-danger";
-      } else if (product.badge === "NEW") {
+        break;
+
+      case "NEW":
         badgeColor = "bg-success";
-      } else {
+        break;
+
+      case "HOT":
         badgeColor = "bg-warning text-dark";
-      }
-      badgeHTML = `<span class="card-badge ${badgeColor}">${product.badge}</span>`;
+        break;
+    }
+    if (product.badge) {
+      badgeHTML = `<span class="card-badge ${badgeColor}">
+        ${product.badge}
+    </span>`;
     }
 
-    container.innerHTML += `
-      <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+    let outOfStockHtml = "";
+    if (product.stock === 0) {
+      outOfStockHtml = `<span class="card-out-of-stock">Out of stock</span>`;
+    }
+
+    html += `
+      <div class="col-sm-12 col-md-6 col-lg-4">
         <div class="card p-3 h-100 shadow-sm border text-center d-flex flex-column justify-content-between overflow-hidden">
           
-          <div class="product-img-holder mb-3 position-relative" style="height: 280px; width: 100%; display: flex; align-items: center; justify-content: center; background-color: var(bg-light); border-radius: 8px; overflow: hidden; padding: 5px;">
+          <div class="product-img-holder mb-3 position-relative">
             ${badgeHTML}
-            <img src="${product.img}" alt="${product.name}" class="img-fluid w-100 h-100" style="object-fit: contain; transition: transform 0.3s ease;">
+            ${outOfStockHtml}
+            <img src="${product.img}" alt="${product.name}">
           </div>
           
           <div class="card-body p-0 d-flex flex-column justify-content-between">
@@ -320,6 +335,7 @@ function showProducts(list) {
       </div>
     `;
   });
+  container.innerHTML = html;
 }
 
 function filterProducts(category, buttonElement) {
@@ -344,7 +360,7 @@ function addItemToCart(productId) {
   const product = products.find((p) => p.id === productId);
 
   if (product && product.stock > 0) {
-    cart.push(product);
+    cart.push({ ...product });
     product.stock--;
 
     localStorage.setItem("cubmart_cart", JSON.stringify(cart));
@@ -369,6 +385,13 @@ function updateCartCount() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector("form");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    alert("Message sent successfully!");
+  });
+
   cart.forEach((cartItem) => {
     const product = products.find((p) => p.id === cartItem.id);
     if (product) {
