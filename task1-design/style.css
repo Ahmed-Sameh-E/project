@@ -135,7 +135,6 @@ ul {
   margin-left: 5px;
 }
 
-/* Hero Section */
 .hero {
   display: flex;
   align-items: center;
@@ -199,7 +198,6 @@ ul {
   animation: fadeIn 1s ease-in-out;
 }
 
-/* Why Choose Us Cards */
 .questions {
   padding: 5rem 0;
   display: flex;
@@ -267,69 +265,81 @@ ul {
   color: var(--star-color);
 }
 
-.product-img-holder {
-  height: 280px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: var(--bg-light);
-  border-radius: 8px;
-  overflow: hidden;
-  padding: 5px;
+.product-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
 }
 
-.product-img-holder img {
-  width: 100%;
-  height: 100%;
+.card-product {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border: solid 1px var(--text-main);
+  border-radius: 1rem;
+  padding: 20px;
+  background: var(--bg-white);
+  box-shadow: var(--shadow-light);
+  transition: var(--transition-smooth);
+  position: relative;
+}
+
+.card-product:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+}
+
+.product-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-product img {
+  width: 180px;
+  height: 180px;
   object-fit: contain;
+}
+
+.product-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.product-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.product-price {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--text-main);
+}
+
+.product-text button {
+  background-color: var(--star-color);
+  color: var(--primary-color);
+  padding: 12px 35px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: 2px solid var(--star-color);
+  border-radius: 8px;
+  cursor: pointer;
   transition: 0.3s;
 }
 
-.card-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 4px;
-  color: white;
-  z-index: 5;
+.product-text button:hover {
+  background: transparent;
+  color: var(--star-color);
 }
 
-#filterTabs .nav-link {
-  color: var(--text-main);
-  background-color: var(--bg-light);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  padding: 10px 24px;
-  border-radius: 8px;
-  transition: var(--transition-smooth);
-}
-
-#filterTabs .nav-link.active {
-  background-color: var(--star-color) !important;
-  color: var(--primary-color) !important;
-  border-color: var(--star-color);
-}
-
-#filterTabs .nav-link:hover:not(.active) {
-  background-color: #e5e7eb;
-  color: var(--primary-color);
-}
-
-#products-container .card {
-  background-color: var(--bg-white);
-  border-radius: 12px;
-  transition: var(--transition-smooth);
-}
-
-#products-container .card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-hover) !important;
-}
-
-.card-out-of-stock {
+.badge-new {
   background-color: var(--text-muted);
   position: absolute;
   top: 10px;
@@ -338,7 +348,33 @@ ul {
   font-weight: 700;
   padding: 4px 10px;
   border-radius: 4px;
-  color: white;
+  color: var(--bg-light);
+  z-index: 5;
+}
+
+.badge-hot {
+  background-color: var(--star-color);
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  color: var(--primary-color);
+  z-index: 5;
+}
+
+.badge-sale {
+  background-color: var(--accent-color);
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  color: var(--bg-light);
   z-index: 5;
 }
 
@@ -404,6 +440,16 @@ ul {
 
 .footer a:hover {
   color: var(--star-color);
+}
+
+.product-links {
+  color: var(--text-muted);
+  margin-right: 10px;
+  padding: 10px;
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--primary-color);
 }
 
 @keyframes fadeIn {

@@ -61,37 +61,17 @@
                 aria-labelledby="shopDropdown"
               >
                 <li>
-                  <a
-                    class="dropdown-item"
-                    href="#shop"
-                    onclick="filterProducts('all')"
-                    >All Products</a
-                  >
+                  <a class="dropdown-item" href="#shop">All Products</a>
                 </li>
                 <li><hr class="dropdown-divider" /></li>
                 <li>
-                  <a
-                    class="dropdown-item"
-                    href="#shop"
-                    onclick="filterProducts('electronics')"
-                    >Electronics</a
-                  >
+                  <a class="dropdown-item" href="#shop">Electronics</a>
                 </li>
                 <li>
-                  <a
-                    class="dropdown-item"
-                    href="#shop"
-                    onclick="filterProducts('accessories')"
-                    >Accessories</a
-                  >
+                  <a class="dropdown-item" href="#shop">Accessories</a>
                 </li>
                 <li>
-                  <a
-                    class="dropdown-item"
-                    href="#shop"
-                    onclick="filterProducts('lifestyle')"
-                    >Lifestyle</a
-                  >
+                  <a class="dropdown-item" href="#shop">Lifestyle</a>
                 </li>
               </ul>
             </li>
@@ -162,44 +142,137 @@
       </section>
 
       <section class="shop section py-5" id="shop">
-        <h2 class="text-center mb-4">Our Products</h2>
-        <div class="d-flex justify-content-center mb-4">
-          <ul class="nav nav-pills" id="filterTabs">
-            <li class="nav-item">
+        <div class="demo-card" id="nav-patterns">
+          <h2 class="text-center mb-4">Our Products</h2>
+
+          <ul class="nav nav-tabs" id="myTabs" role="tablist">
+            <li class="nav-item" role="presentation">
               <button
-                class="nav-link active fw-bold me-2"
-                onclick="filterProducts('all', this)"
+                class="nav-link active product-links"
+                data-bs-toggle="tab"
+                data-bs-target="#tabAll"
+                role="tab"
               >
                 All
               </button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" role="presentation">
               <button
-                class="nav-link fw-bold me-2"
-                onclick="filterProducts('electronics', this)"
+                class="nav-link product-links"
+                data-bs-toggle="tab"
+                data-bs-target="#tabElectronics"
+                role="tab"
+                aria-selected="false"
               >
                 Electronics
               </button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" role="presentation">
               <button
-                class="nav-link fw-bold me-2"
-                onclick="filterProducts('accessories', this)"
+                class="nav-link product-links"
+                data-bs-toggle="tab"
+                data-bs-target="#tabAccessories"
+                role="tab"
+                aria-selected="false"
               >
                 Accessories
               </button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" role="presentation">
               <button
-                class="nav-link fw-bold"
-                onclick="filterProducts('lifestyle', this)"
+                class="nav-link product-links"
+                data-bs-toggle="tab"
+                data-bs-target="#tabLifestyle"
+                role="tab"
+                aria-selected="false"
               >
                 Lifestyle
               </button>
             </li>
           </ul>
+          <div class="tab-content border border-top-0 rounded-bottom p-3">
+            <div class="tab-pane fade show active" id="tabAll" role="tabpanel">
+              <div class="product-container">
+                <div class="card-product">
+                  <div class="product-img">
+                    <img
+                      src="../imgs/PremiumWirelessHeadphones.jpg"
+                      alt="Premium Wireless Headphones"
+                    />
+                  </div>
+                  <span class="badge-sale">SALE</span>
+                  <div class="product-text">
+                    <span class="product-name"
+                      >Premium Wireless Headphones</span
+                    >
+                    <span class="product-price">49.99$</span>
+                    <button>Add to cart</button>
+                  </div>
+                </div>
+
+                <div class="card-product">
+                  <div class="product-img">
+                    <img
+                      src="../imgs/PremiumWirelessHeadphones.jpg"
+                      alt="Premium Wireless Headphones"
+                    />
+                  </div>
+                  <div class="product-text">
+                    <span class="badge-hot">HOT</span>
+                    <span class="product-name"
+                      >Premium Wireless Headphones</span
+                    >
+                    <span class="product-price">49.99$</span>
+                    <button>Add to cart</button>
+                  </div>
+                </div>
+
+                <div class="card-product">
+                  <div class="product-img">
+                    <img
+                      src="../imgs/PremiumWirelessHeadphones.jpg"
+                      alt="Premium Wireless Headphones"
+                    />
+                  </div>
+                  <div class="product-text">
+                    <span class="product-name"
+                      >Premium Wireless Headphones</span
+                    >
+                    <span class="product-price">49.99$</span>
+                    <button>Add to cart</button>
+                  </div>
+                </div>
+
+                <div class="card-product">
+                  <div class="product-img">
+                    <img
+                      src="../imgs/PremiumWirelessHeadphones.jpg"
+                      alt="Premium Wireless Headphones"
+                    />
+                  </div>
+                  <div class="product-text">
+                    <span class="product-name"
+                      >Premium Wireless Headphones</span
+                    >
+                    <span class="product-price">49.99$</span>
+                    <button>Add to cart</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="tabElectronics"
+              role="tabpanel"
+            ></div>
+            <div
+              class="tab-pane fade"
+              id="tabAccessories"
+              role="tabpanel"
+            ></div>
+            <div class="tab-pane fade" id="tabLifestyle" role="tabpanel"></div>
+          </div>
         </div>
-        <div class="row g-4" id="products-container"></div>
       </section>
 
       <section class="spotlight-section py-5" id="spotlight">
@@ -223,9 +296,7 @@
               compartments, and a sleek water-resistant design to protect your
               essentials on the go.
             </p>
-            <button class="btn-hero" onclick="addItemToCart(4)">
-              Get It Now
-            </button>
+            <button class="btn-hero">Get It Now</button>
           </div>
         </div>
       </section>
@@ -361,6 +432,5 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
-    <script src="script.js"></script>
   </body>
 </html>

@@ -1,5 +1,5 @@
 Ahmed Sameh Hassan Elhelpawy
 
 in folder "imgs" there are all images in the website
-in folder "task1-design" there are the "index.html" of the website and his "style.css" and "script.js"
-in folder "task2-logic" there are the "cart.html" of the cart in the website and his "cart.css" and "cart.js"
+in folder "task1-design" there are the "index.html" of the website and his "style.css"
+in folder "task2-logic" there are the "task2.html" and "script.js" 
