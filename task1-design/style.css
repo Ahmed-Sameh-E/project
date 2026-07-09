@@ -435,6 +435,11 @@ img {
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 12px;
   box-shadow: var(--shadow-light);
+  transition: var(--transition-smooth);
+}
+
+.review-card:hover {
+  transform: scale(1.12);
 }
 
 .stars {
