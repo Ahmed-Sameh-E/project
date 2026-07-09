@@ -6,6 +6,7 @@
   --text-main: #374151;
   --text-muted: #6b7280;
   --star-color: #f59e0b;
+  --green-color: #19921d;
   --font-main: "Cairo", "Tajawal", sans-serif;
   --transition-smooth: 0.3s ease-in-out;
   --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -16,6 +17,10 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -33,6 +38,18 @@ a {
 
 ul {
   list-style: none;
+}
+
+section {
+  scroll-margin-top: 90px;
+}
+
+button {
+  border: none;
+}
+
+img {
+  display: block;
 }
 
 .navbar {
@@ -189,6 +206,7 @@ ul {
   display: flex;
   justify-content: center;
   align-items: center;
+  max-width: 450px;
 }
 
 .hero-img img {
@@ -271,13 +289,19 @@ ul {
   gap: 25px;
 }
 
+.product-links {
+  color: var(--text-muted);
+  margin-right: 10px;
+  padding: 10px;
+}
+
 .card-product {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 10px;
-  border: solid 1px var(--text-main);
+  border: solid 1px var(--text-muted);
   border-radius: 1rem;
   padding: 20px;
   background: var(--bg-white);
@@ -332,6 +356,7 @@ ul {
   border-radius: 8px;
   cursor: pointer;
   transition: 0.3s;
+  width: 100%;
 }
 
 .product-text button:hover {
@@ -340,7 +365,7 @@ ul {
 }
 
 .badge-new {
-  background-color: var(--text-muted);
+  background-color: var(--green-color);
   position: absolute;
   top: 10px;
   left: 10px;
@@ -383,6 +408,12 @@ ul {
   border-radius: 16px;
   box-shadow: var(--shadow-light);
   border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.spotlight-image img {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
 }
 
 .spotlight-content h3 {
@@ -438,14 +469,13 @@ ul {
   transition: var(--transition-smooth);
 }
 
-.footer a:hover {
-  color: var(--star-color);
+.footer a {
+  transition: 0.3s;
 }
 
-.product-links {
-  color: var(--text-muted);
-  margin-right: 10px;
-  padding: 10px;
+.footer a:hover {
+  transform: translateY(-2px);
+  color: var(--star-color);
 }
 
 .nav-tabs .nav-link.active {
