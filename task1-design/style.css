@@ -478,10 +478,6 @@ h2 {
   transition: var(--transition-smooth);
 }
 
-.footer a {
-  transition: 0.3s;
-}
-
 .footer a:hover {
   transform: translateY(-2px);
   color: var(--star-color);
