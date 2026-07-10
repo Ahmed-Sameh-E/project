@@ -241,25 +241,37 @@ const products = [
   },
 ];
 
+const cart = [];
+
 function continueToShopping() {
   alert("Welcome to CubMart");
   let choice;
   do {
-    choice = prompt("1 - Show products \n2 - Exit");
-    if (choice === "1") {
-      mainFunction(products);
-    } else if (choice === "2") {
-      alert("good bey");
-    } else {
-      alert("invalid input");
+    choice = prompt("1 - Show products \n2 - Show cart \n3 - Exit");
+
+    switch (choice) {
+      case "1":
+        mainFunction(products);
+        break;
+      case "2":
+        viewCart(cart);
+        break;
+      case "3":
+        alert("good");
+        break;
+      default:
+        alert("invalid input");
+        break;
     }
-  } while (choice !== "2");
+  } while (choice !== "3");
 }
 
 function selectCategory() {
   let selected;
   do {
     selected = prompt(`
+      Choose category :
+
       1 - All
       2 - Electronics
       3 - Accessories
@@ -291,7 +303,7 @@ function selectCategory() {
 }
 
 function display(list, category) {
-  let product = "";
+  let product = "  0 - Back\n";
   for (let i = 0; i < list.length; i++) {
     if (category === "All" || list[i].category === category) {
       product += `${list[i].id} - ${list[i].name}          ${list[i].badge}\n`;
@@ -299,13 +311,27 @@ function display(list, category) {
       continue;
     }
   }
-  let selectedProduct = Number(
-    prompt(`
-    Choose a product:
+  let selectedProduct;
+  do {
+    selectedProduct = Number(
+      prompt(`
+Choose a product:
 
+${product}
+`),
+    );
 
-${product}`),
-  );
+    if (selectedProduct === 0) {
+      return 0;
+    }
+
+    let found = findProduct(list, selectedProduct);
+    if (found && (category === "All" || found.category === category)) {
+      return selectedProduct;
+    }
+      alert("Invalid product ID");
+  } while (true);
+
   return selectedProduct;
 }
 
@@ -317,14 +343,13 @@ function findProduct(list, id) {
   }
 }
 
-function displayOneProduct(product, list, category) {
+function displayOneProduct(product) {
   let choice;
   do {
     choice = prompt(`
   Name : ${product.name}
   Price : ${product.price}
-  Stock : ${product.stock}
-  ${product.badge ? `Badge : ${product.badge}` : ""}
+  Stock : ${product.stock}${product.badge ? `\n  Badge : ${product.badge}` : ""}
   ===============================
   1 - Add to cart
   2 - Back
@@ -336,10 +361,10 @@ function displayOneProduct(product, list, category) {
         return "1";
         break;
       case "2":
-        display(list, category);
+        return "2";
         break;
       case "3":
-        continueToShopping();
+        return "3";
         break;
       default:
         alert("invalid input");
@@ -349,11 +374,79 @@ function displayOneProduct(product, list, category) {
   } while (choice !== "1" && choice !== "2" && choice !== "3");
 }
 
+function viewCart(list) {
+  if (list.length === 0) {
+    alert("Your Cart is Empty");
+    return;
+  }
+  let cartDetails = "Your Cart : \n";
+  let totalPrice = 0;
+  let moreThanOne = [];
+  for (let i = 0; i < list.length; i++) {
+    let count = 0;
+    if (moreThanOne.includes(list[i].id)) {
+      continue;
+    }
+    for (let j = 0; j < list.length; j++) {
+      if (list[j].id === list[i].id) {
+        count++;
+      }
+    }
+
+    moreThanOne.push(list[i].id);
+    let itemTotal = list[i].price * count;
+    cartDetails += `\n - ${list[i].name} x${count} (${itemTotal.toFixed(2)}$)`;
+    totalPrice += itemTotal;
+  }
+  let choice;
+  do {
+    choice = prompt(`${cartDetails}
+==========================
+    Total price = ${totalPrice.toFixed(2)}$
+    
+    1 - Buy
+    2 - Back`);
+
+    switch (choice) {
+      case "1":
+        buy();
+        break;
+      case "2":
+        break;
+      default:
+        break;
+    }
+  } while (choice !== "1" && choice !== "2");
+
+  return choice;
+}
+
+function buy() {}
+
 function mainFunction(list) {
   let category = selectCategory();
   let selectedId = display(list, category);
   let product = findProduct(list, selectedId);
-  displayOneProduct(product, list, category);
+  
+
+  if (selectedId === 0) {
+    return; 
+  } else {
+    let choice = displayOneProduct(product);
+  }
+
+  if (!product) {
+    alert("Product not found!");
+    return;
+  }
+
+  if (product.stock > 0) {
+    alert("Product added to cart successfully!");
+    cart.push(product);
+    product.stock--;
+  } else {
+    alert("Sorry, this item is out of stock!");
+  }
 }
 
 continueToShopping();
