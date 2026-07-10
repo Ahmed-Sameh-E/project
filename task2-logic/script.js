@@ -257,36 +257,44 @@ function continueToShopping() {
 }
 
 function selectCategory() {
-  let selected = prompt(`
-    1 - All
-    2 - Electronics
-    3 - Accessories
-    4 - Lifestyle
-  `);
+  let selected;
+  do {
+    selected = prompt(`
+      1 - All
+      2 - Electronics
+      3 - Accessories
+      4 - Lifestyle
+    `);
 
-  switch (selected) {
-    case "1":
-      return "All";
+    switch (selected) {
+      case "1":
+        return "All";
 
-    case "2":
-      return "electronics";
+      case "2":
+        return "electronics";
 
-    case "3":
-      return "accessories";
+      case "3":
+        return "accessories";
 
-    case "4":
-      return "lifestyle";
+      case "4":
+        return "lifestyle";
 
-    default:
-      return "";
-  }
+      default:
+        alert("invalid input");
+    }
+  } while (
+    selected !== "1" &&
+    selected !== "2" &&
+    selected !== "3" &&
+    selected !== "4"
+  );
 }
 
 function display(list, category) {
   let product = "";
   for (let i = 0; i < list.length; i++) {
     if (category === "All" || list[i].category === category) {
-      product += `${list[i].id} - ${list[i].name} \n`;
+      product += `${list[i].id} - ${list[i].name}          ${list[i].badge}\n`;
     } else {
       continue;
     }
@@ -309,12 +317,43 @@ function findProduct(list, id) {
   }
 }
 
+function displayOneProduct(product, list, category) {
+  let choice;
+  do {
+    choice = prompt(`
+  Name : ${product.name}
+  Price : ${product.price}
+  Stock : ${product.stock}
+  ${product.badge ? `Badge : ${product.badge}` : ""}
+  ===============================
+  1 - Add to cart
+  2 - Back
+  3 - Exit
+`);
+
+    switch (choice) {
+      case "1":
+        return "1";
+        break;
+      case "2":
+        display(list, category);
+        break;
+      case "3":
+        continueToShopping();
+        break;
+      default:
+        alert("invalid input");
+        break;
+    }
+    return choice;
+  } while (choice !== "1" && choice !== "2" && choice !== "3");
+}
+
 function mainFunction(list) {
   let category = selectCategory();
-  let selectedId = display(products, category);
-  let product = findProduct(products, selectedId);
-
-  console.log(product);
+  let selectedId = display(list, category);
+  let product = findProduct(list, selectedId);
+  displayOneProduct(product, list, category);
 }
 
 continueToShopping();
