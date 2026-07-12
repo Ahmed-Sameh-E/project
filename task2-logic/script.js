@@ -240,12 +240,20 @@ const products = [
     badge: "",
   },
 ];
+const originalProducts = structuredClone(products);
 
 const cart = [];
+
+function restartProducts() {
+  for (let i = 0; i < products.length; i++) {
+    products[i].stock = originalProducts[i].stock;
+  }
+}
 
 function continueToShopping() {
   alert("Welcome to CubMart");
   let choice;
+
   do {
     choice = prompt("1 - Show products \n2 - Show cart \n3 - Exit");
 
@@ -257,7 +265,7 @@ function continueToShopping() {
         viewCart(cart);
         break;
       case "3":
-        alert("good");
+        alert("good bye");
         break;
       default:
         alert("invalid input");
@@ -272,6 +280,7 @@ function selectCategory() {
     selected = prompt(`
       Choose category :
 
+      0 - Back
       1 - All
       2 - Electronics
       3 - Accessories
@@ -279,6 +288,9 @@ function selectCategory() {
     `);
 
     switch (selected) {
+      case "0":
+        return undefined;
+
       case "1":
         return "All";
 
@@ -303,36 +315,45 @@ function selectCategory() {
 }
 
 function display(list, category) {
-  let product = "  0 - Back\n";
+  let page = 0;
+  let pageSize = 10;
+  let filtered = [];
+
   for (let i = 0; i < list.length; i++) {
     if (category === "All" || list[i].category === category) {
-      product += `${list[i].id} - ${list[i].name}          ${list[i].badge}\n`;
-    } else {
-      continue;
+      filtered.push(list[i]);
     }
   }
-  let selectedProduct;
-  do {
-    selectedProduct = Number(
-      prompt(`
-Choose a product:
 
-${product}
-`),
-    );
-
-    if (selectedProduct === 0) {
+  while (true) {
+    let product = "0 - Back\n\n";
+    let start = page * pageSize;
+    let end = Math.min(start + pageSize, filtered.length);
+    for (let i = start; i < end; i++) {
+      product += `${filtered[i].id} - ${filtered[i].name}\n`;
+    }
+    if (page > 0) {
+      product += "\n98 - Previous Page";
+    }
+    if (end < filtered.length) {
+      product += "\n99 - Next Page";
+    }
+    let choice = Number(prompt(product));
+    if (choice === 0) {
       return 0;
     }
-
-    let found = findProduct(list, selectedProduct);
-    if (found && (category === "All" || found.category === category)) {
-      return selectedProduct;
+    if (choice === 99 && end < filtered.length) {
+      page++;
+      continue;
     }
-      alert("Invalid product ID");
-  } while (true);
-
-  return selectedProduct;
+    if (choice === 98 && page > 0) {
+      page--;
+      continue;
+    }
+    let found = findProduct(filtered, choice);
+    if (found) return choice;
+    alert("Invalid product ID");
+  }
 }
 
 function findProduct(list, id) {
@@ -341,6 +362,7 @@ function findProduct(list, id) {
       return list[i];
     }
   }
+  return null;
 }
 
 function displayOneProduct(product) {
@@ -359,93 +381,269 @@ function displayOneProduct(product) {
     switch (choice) {
       case "1":
         return "1";
-        break;
       case "2":
         return "2";
-        break;
       case "3":
         return "3";
-        break;
       default:
         alert("invalid input");
         break;
     }
-    return choice;
   } while (choice !== "1" && choice !== "2" && choice !== "3");
 }
 
 function viewCart(list) {
-  if (list.length === 0) {
-    alert("Your Cart is Empty");
-    return;
+  while (true) {
+    if (list.length === 0) {
+      alert("Your Cart is Empty");
+      return;
+    }
+    let cartDetails = "Your Cart : \n";
+    let totalPrice = 0;
+    let groupedCart = [];
+    let checkedIds = [];
+    for (let i = 0; i < list.length; i++) {
+      let count = 0;
+      if (checkedIds.includes(list[i].id)) {
+        continue;
+      }
+      for (let j = 0; j < list.length; j++) {
+        if (list[j].id === list[i].id) {
+          count++;
+        }
+      }
+      checkedIds.push(list[i].id);
+      groupedCart.push({
+        product: list[i],
+        count: count,
+      });
+      let itemTotal = list[i].price * count;
+      cartDetails += `\n - ${list[i].name} x${count} (${itemTotal.toFixed(2)}$)`;
+      totalPrice += itemTotal;
+    }
+
+    let choice;
+    do {
+      choice = prompt(`${cartDetails}
+  ==========================
+      Total price = ${totalPrice.toFixed(2)}$
+      
+      1 - Buy
+      2 - Remove an item
+      3 - Back`);
+
+      switch (choice) {
+        case "1":
+          buy(list);
+          return;
+        case "2":
+          removeItemFromCart(list, groupedCart);
+          break;
+        case "3":
+        case null:
+          return;
+        default:
+          break;
+      }
+    } while (choice !== "1" && choice !== "2" && choice !== "3");
   }
-  let cartDetails = "Your Cart : \n";
-  let totalPrice = 0;
-  let moreThanOne = [];
-  for (let i = 0; i < list.length; i++) {
-    let count = 0;
-    if (moreThanOne.includes(list[i].id)) {
+}
+
+function removeItemFromCart(cart, list) {
+  while (true) {
+    let removeItemText = "    Choose an item to remove: \n0 - Back";
+    for (let i = 0; i < list.length; i++) {
+      removeItemText += `\n ${i + 1} - ${list[i].product.name}  x${list[i].count}  (${list[i].product.price}$)`;
+    }
+
+    let userSelection = Number(prompt(removeItemText));
+    if (userSelection === 0) {
+      return;
+    }
+
+    if (
+      isNaN(userSelection) ||
+      userSelection < 1 ||
+      userSelection > list.length
+    ) {
+      alert("Invalid choice");
       continue;
     }
-    for (let j = 0; j < list.length; j++) {
-      if (list[j].id === list[i].id) {
+
+    let selectedGroup = list[userSelection - 1];
+    let targetProduct = selectedGroup.product;
+    let maxAvailable = selectedGroup.count;
+
+    let quantityToRemove = Number(
+      prompt(
+        `How many units do you want to remove? (Max: ${maxAvailable}) \n0 - Back`,
+      ),
+    );
+    if (quantityToRemove === 0) {
+      continue;
+    }
+
+    if (
+      Number.isInteger(quantityToRemove) &&
+      quantityToRemove > 0 &&
+      quantityToRemove <= maxAvailable
+    ) {
+      let removedCount = 0;
+      for (let i = cart.length - 1; i >= 0; i--) {
+        if (cart[i].id === targetProduct.id) {
+          cart[i].stock++;
+          cart.splice(i, 1);
+          removedCount++;
+        }
+
+        if (removedCount === quantityToRemove) {
+          break;
+        }
+      }
+      alert(
+        `${quantityToRemove} units of "${targetProduct.name}" removed successfully.`,
+      );
+      return;
+    } else {
+      alert("Invalid quantity!");
+    }
+  }
+}
+
+function buy(cart) {
+  let subtotal = 0;
+  let groupedCart = [];
+  let checkedIds = [];
+
+  for (let i = 0; i < cart.length; i++) {
+    if (checkedIds.includes(cart[i].id)) {
+      continue;
+    }
+    let count = 0;
+
+    for (let j = 0; j < cart.length; j++) {
+      if (cart[j].id === cart[i].id) {
         count++;
       }
     }
-
-    moreThanOne.push(list[i].id);
-    let itemTotal = list[i].price * count;
-    cartDetails += `\n - ${list[i].name} x${count} (${itemTotal.toFixed(2)}$)`;
-    totalPrice += itemTotal;
+    checkedIds.push(cart[i].id);
+    groupedCart.push({
+      product: cart[i],
+      count: count,
+    });
+    subtotal += cart[i].price * count;
   }
-  let choice;
-  do {
-    choice = prompt(`${cartDetails}
-==========================
-    Total price = ${totalPrice.toFixed(2)}$
-    
-    1 - Buy
-    2 - Back`);
 
-    switch (choice) {
-      case "1":
-        buy();
+  let promoInput = prompt("Enter promo code : \n0 - Skip");
+  let discount = 0;
+  let appliedCode = "None";
+
+  if (promoInput && promoInput.trim() !== "0") {
+    let code = promoInput.toUpperCase().trim();
+    if (code === "CUBMART") {
+      discount = subtotal * 0.2;
+      appliedCode = "CUBMART (-20%)";
+      alert("Promo code applied successfully! 20% OFF");
+    } else if (code === "CUB20") {
+      discount = Math.min(20, subtotal);
+      appliedCode = "CUB20 (-20$)";
+      alert("Promo code applied successfully! 20$ OFF");
+    } else {
+      alert("Invalid Promo Code! Proceeding without discount.");
+    }
+  }
+
+  let finalTotal = subtotal - discount;
+  let receipt = "========== Receipt ==========\n";
+  for (let i = 0; i < groupedCart.length; i++) {
+    let item = groupedCart[i];
+    let itemTotal = item.product.price * item.count;
+    receipt += `\n ${item.product.name}\n   x${item.count} @ ${item.product.price.toFixed(2)}$ = ${itemTotal.toFixed(2)}$\n`;
+  }
+  receipt += "\n==============================";
+  receipt += `\nSubtotal    : ${subtotal.toFixed(2)}$`;
+  receipt += `\nPromo Code  : ${appliedCode}`;
+  receipt += `\nDiscount    : -${discount.toFixed(2)}$`;
+  receipt += "\n==============================";
+  receipt += `\nTOTAL PAID  : ${finalTotal.toFixed(2)}$`;
+  receipt += "\n==============================";
+  receipt += "\nThank you for shopping with CubMart ❤️";
+  console.log(receipt);
+  alert(receipt);
+  cart.length = 0;
+  restartProducts();
+}
+
+function mainFunction(list) {
+  let step = 1;
+  let category;
+  let selectedId;
+  let product;
+  let choice;
+
+  while (step > 0) {
+    switch (step) {
+      case 1:
+        category = selectCategory();
+        if (category === undefined) {
+          step = 0;
+        } else {
+          step = 2;
+        }
         break;
-      case "2":
+
+      case 2:
+        selectedId = display(list, category);
+        if (selectedId === 0) {
+          step = 1;
+        } else {
+          product = findProduct(list, selectedId);
+          step = 3;
+        }
         break;
+
+      case 3:
+        choice = displayOneProduct(product);
+        if (choice === "1") {
+          if (product.stock > 0) {
+            let quantityToAdd = Number(
+              prompt(
+                `Enter quantity to add (Available in stock: ${product.stock}): \n0 - Back`,
+              ),
+            );
+            if (quantityToAdd === 0) {
+              continue;
+            }
+            if (
+              Number.isInteger(quantityToAdd) &&
+              quantityToAdd > 0 &&
+              quantityToAdd <= product.stock
+            ) {
+              for (let i = 0; i < quantityToAdd; i++) {
+                cart.push(product);
+              }
+              product.stock -= quantityToAdd;
+              alert(
+                `${quantityToAdd} units of "${product.name}" added successfully!`,
+              );
+              step = 2;
+            } else {
+              alert("Invalid quantity or not enough stock!");
+            }
+          } else {
+            alert("Sorry, this item is out of stock!");
+          }
+          step = 2;
+        } else if (choice === "2") {
+          step = 2;
+        } else if (choice === "3") {
+          step = 0;
+        }
+        break;
+
       default:
         break;
     }
-  } while (choice !== "1" && choice !== "2");
-
-  return choice;
-}
-
-function buy() {}
-
-function mainFunction(list) {
-  let category = selectCategory();
-  let selectedId = display(list, category);
-  let product = findProduct(list, selectedId);
-  
-
-  if (selectedId === 0) {
-    return; 
-  } else {
-    let choice = displayOneProduct(product);
-  }
-
-  if (!product) {
-    alert("Product not found!");
-    return;
-  }
-
-  if (product.stock > 0) {
-    alert("Product added to cart successfully!");
-    cart.push(product);
-    product.stock--;
-  } else {
-    alert("Sorry, this item is out of stock!");
   }
 }
 
