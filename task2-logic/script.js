@@ -241,7 +241,10 @@ const products = [
   },
 ];
 const originalProducts = structuredClone(products);
-
+const promoCodes = [
+  { code: "CUBMART", amount: 20 },
+  { code: "CUB50", amount: 50 },
+];
 const cart = [];
 
 function restartProducts() {
@@ -510,8 +513,78 @@ function removeItemFromCart(cart, list) {
   }
 }
 
-function buy(cart) {
+function calculateSubtotal(groupedCart) {
   let subtotal = 0;
+  for (let i = 0; i < groupedCart.length; i++) {
+    subtotal += groupedCart[i].product.price * groupedCart[i].count;
+  }
+  return subtotal;
+}
+
+function getDiscountRate(subtotal) {
+  if (subtotal >= 1000) {
+    return 0.15;
+  } else if (subtotal >= 600) {
+    return 0.1;
+  } else if (subtotal >= 300) {
+    return 0.05;
+  } else {
+    return 0;
+  }
+}
+
+function applyPromoCode(code) {
+  if (!code) {
+    return null;
+  }
+  let cleanCode = code.toUpperCase().trim();
+  return promoCodes.find(function (item) {
+    return item.code === cleanCode;
+  });
+}
+
+function calculateTax(amount) {
+  return amount * 0.14;
+}
+
+function generateReceipt(groupedCart, subtotal, discountRate, promo, tax) {
+  let tierDiscount = subtotal * discountRate;
+  let promoDiscount = 0;
+  let appliedPromoName = "None";
+
+  if (promo) {
+    promoDiscount = promo.amount;
+    appliedPromoName = `${promo.code} (-${promo.amount}$)`;
+  }
+
+  let totalDiscount = tierDiscount + promoDiscount;
+  if (totalDiscount > subtotal) {
+    totalDiscount = subtotal;
+  }
+
+  let finalTotal = subtotal - totalDiscount + tax;
+
+  let receipt = "========== Receipt ==========\n";
+  for (let i = 0; i < groupedCart.length; i++) {
+    let item = groupedCart[i];
+    let itemTotal = item.product.price * item.count;
+    receipt += `\n ${item.product.name}\n   x${item.count} X ${item.product.price.toFixed(2)}$ = ${itemTotal.toFixed(2)}$\n`;
+  }
+  receipt += "\n==============================";
+  receipt += `\nSubtotal       : ${subtotal.toFixed(2)}$`;
+  receipt += `\nTier Discount  : -${tierDiscount.toFixed(2)}$ (${discountRate * 100}%)`;
+  receipt += `\nPromo Code     : ${appliedPromoName}`;
+  receipt += `\nPromo Discount : -${promoDiscount.toFixed(2)}$`;
+  receipt += `\nTax (14%)      : ${tax.toFixed(2)}$`;
+  receipt += "\n==============================";
+  receipt += `\nTOTAL PAID     : ${finalTotal.toFixed(2)}$`;
+  receipt += "\n==============================";
+  receipt += "\nThank you for shopping with CubMart ❤️";
+
+  return receipt;
+}
+
+function buy(cart) {
   let groupedCart = [];
   let checkedIds = [];
 
@@ -520,7 +593,6 @@ function buy(cart) {
       continue;
     }
     let count = 0;
-
     for (let j = 0; j < cart.length; j++) {
       if (cart[j].id === cart[i].id) {
         count++;
@@ -531,43 +603,38 @@ function buy(cart) {
       product: cart[i],
       count: count,
     });
-    subtotal += cart[i].price * count;
   }
 
-  let promoInput = prompt("Enter promo code : \n0 - Skip");
-  let discount = 0;
-  let appliedCode = "None";
+  let subtotal = calculateSubtotal(groupedCart);
 
+  let discountRate = getDiscountRate(subtotal);
+
+  let promoInput = prompt("Enter promo code : \n0 - Skip");
+  let promo = null;
   if (promoInput && promoInput.trim() !== "0") {
-    let code = promoInput.toUpperCase().trim();
-    if (code === "CUBMART") {
-      discount = subtotal * 0.2;
-      appliedCode = "CUBMART (-20%)";
-      alert("Promo code applied successfully! 20% OFF");
-    } else if (code === "CUB20") {
-      discount = Math.min(20, subtotal);
-      appliedCode = "CUB20 (-20$)";
-      alert("Promo code applied successfully! 20$ OFF");
+    promo = applyPromoCode(promoInput);
+    if (promo) {
+      alert(`Promo code applied successfully! ${promo.amount}$ OFF`);
     } else {
-      alert("Invalid Promo Code! Proceeding without discount.");
+      alert("Invalid Promo Code! Proceeding without promo discount.");
     }
   }
 
-  let finalTotal = subtotal - discount;
-  let receipt = "========== Receipt ==========\n";
-  for (let i = 0; i < groupedCart.length; i++) {
-    let item = groupedCart[i];
-    let itemTotal = item.product.price * item.count;
-    receipt += `\n ${item.product.name}\n   x${item.count} @ ${item.product.price.toFixed(2)}$ = ${itemTotal.toFixed(2)}$\n`;
-  }
-  receipt += "\n==============================";
-  receipt += `\nSubtotal    : ${subtotal.toFixed(2)}$`;
-  receipt += `\nPromo Code  : ${appliedCode}`;
-  receipt += `\nDiscount    : -${discount.toFixed(2)}$`;
-  receipt += "\n==============================";
-  receipt += `\nTOTAL PAID  : ${finalTotal.toFixed(2)}$`;
-  receipt += "\n==============================";
-  receipt += "\nThank you for shopping with CubMart ❤️";
+  let tierDiscount = subtotal * discountRate;
+  let promoDiscount = promo ? promo.amount : 0;
+  let taxableAmount = subtotal - (tierDiscount + promoDiscount);
+  if (taxableAmount < 0) taxableAmount = 0;
+
+  let tax = calculateTax(taxableAmount);
+
+  let receipt = generateReceipt(
+    groupedCart,
+    subtotal,
+    discountRate,
+    promo,
+    tax,
+  );
+
   console.log(receipt);
   alert(receipt);
   cart.length = 0;
@@ -647,4 +714,6 @@ function mainFunction(list) {
   }
 }
 
-continueToShopping();
+do {
+  continueToShopping();
+} while (confirm("Place another order ?"));
