@@ -522,11 +522,11 @@ function calculateSubtotal(groupedCart) {
 }
 
 function getDiscountRate(subtotal) {
-  if (subtotal >= 1000) {
+  if (subtotal > 1000) {
     return 0.15;
-  } else if (subtotal >= 600) {
+  } else if (subtotal > 600) {
     return 0.1;
-  } else if (subtotal >= 300) {
+  } else if (subtotal > 300) {
     return 0.05;
   } else {
     return 0;
