@@ -1,5 +1,13 @@
-Ahmed Sameh Hassan Elhelpawy
+CubMart - File Structure
+Student Name: Ahmed Sameh Hassan Elhelpawy
 
-in folder "imgs" there are all images in the website
-in folder "task1-design" there are the "index.html" of the website and his "style.css"
-in folder "task2-logic" there are the "task2.html" and "script.js" 
+imgs/
+    Website images.
+
+task1-design/
+    index.html -> Store page (HTML, CSS & Bootstrap)
+    style.css  -> Page styles
+
+task2-logic/
+    task2.html -> HTML shell used to run script.js
+    script.js  -> Ordering & pricing logic

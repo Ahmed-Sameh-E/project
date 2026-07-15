@@ -320,13 +320,9 @@ function selectCategory() {
 function display(list, category) {
   let page = 0;
   let pageSize = 10;
-  let filtered = [];
-
-  for (let i = 0; i < list.length; i++) {
-    if (category === "All" || list[i].category === category) {
-      filtered.push(list[i]);
-    }
-  }
+  let filtered = list.filter(function (product) {
+    return category === "All" || product.category === category;
+  });
 
   while (true) {
     let product = "0 - Back\n\n";
@@ -353,19 +349,13 @@ function display(list, category) {
       page--;
       continue;
     }
-    let found = findProduct(filtered, choice);
+    let found = filtered.find(function (product) {
+      return product.id === choice;
+    });
+
     if (found) return choice;
     alert("Invalid product ID");
   }
-}
-
-function findProduct(list, id) {
-  for (let i = 0; i < list.length; i++) {
-    if (list[i].id === id) {
-      return list[i];
-    }
-  }
-  return null;
 }
 
 function displayOneProduct(product) {
@@ -664,7 +654,9 @@ function mainFunction(list) {
         if (selectedId === 0) {
           step = 1;
         } else {
-          product = findProduct(list, selectedId);
+          product = list.find(function (item) {
+            return item.id === selectedId;
+          });
           step = 3;
         }
         break;
